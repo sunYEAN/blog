@@ -4,6 +4,38 @@
   
     
     <entry>
+      <title>用户授权登录</title>
+      <link href="/Blog/2020/07/03/2020-07-03/"/>
+      <url>/Blog/2020/07/03/2020-07-03/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>在开发小程序的时候，经常会需要获取载体平台（微信、抖音、头条等）用户的信息，通过用户在载体平台的唯一凭证（openid等）来做用户登录。今天来聊一聊具体应该怎么做。</p></blockquote><a id="more"></a><h3 id="小程序流程"><a href="#小程序流程" class="headerlink" title="小程序流程"></a>小程序流程</h3><p>首先通过xx.login()方法获取当前用户的code，服务端拿到我们传过去的code去请求平台服务器，获取到用户的openid，然后在自己的数据库通过该openid创建一个用户，此时用户就已经创建完毕。</p><p>服务器端对该用户做登录操作，并把该用户的基本信息（默认的初始信息）+ token传给前端，前端拿到token。如果要获取该用户的详细信息，调用xx.getUserInfo()方法，这时就需要用户授权（弹出一个面板，提示用户授权，授权完毕才能返回详细信息）<br>后更新到自己数据库中。</p><h3 id="抖音-web-页面-OAuth2-0-授权流程"><a href="#抖音-web-页面-OAuth2-0-授权流程" class="headerlink" title="抖音 web 页面 OAuth2.0 授权流程"></a>抖音 web 页面 OAuth2.0 授权流程</h3><p>1、在应用中发起抖音授权登录请求，抖音用户允许授权第三方应用后（扫码确认或账号密码授权登录），确认通过后，会重定向到第三方网站（回调地址），并附带上code字段。</p><p>2、第三方通过code参数，以及ClientKey、ClientSecret等参数，通过API换取access_token。</p><p>3、通过access_token进行接口调用，获取用户基本信息及其他操作。</p><h4 id="静默授权-（用户无感知）"><a href="#静默授权-（用户无感知）" class="headerlink" title="静默授权 （用户无感知）"></a>静默授权 （用户无感知）</h4><p>通过code获取用户openid来做静默登录。scope=login_id</p><p>####</p><p>用户登录过程</p><h4 id="获取小程序指定页面的二维码"><a href="#获取小程序指定页面的二维码" class="headerlink" title="获取小程序指定页面的二维码"></a>获取小程序指定页面的二维码</h4><p>需要后端通过小程序平台的接口去获取buffer 然后保存到本地将地址给到前端。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>2020-06-29</title>
+      <link href="/Blog/2020/06/29/2020-06-29/"/>
+      <url>/Blog/2020/06/29/2020-06-29/</url>
+      
+        <content type="html"><![CDATA[<h2 id="今日坑"><a href="#今日坑" class="headerlink" title="今日坑"></a>今日坑</h2><p>Taro编译bug：css多行省略的属性 </p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="selector-class">.line</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden<span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">-o-text-overflow</span>: ellipsis<span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">text-overflow</span>: ellipsis<span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">display</span>: -webkit-box<span class="meta">!important</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* 该行属性没有编译到打包文件中，与预期不符 */</span></span><br><span class="line">  <span class="attribute">-webkit-box-orient</span>: vertical<span class="meta">!important</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line">没有编译到打包文件中，导致省略出错。</span><br><span class="line">解决：</span><br><span class="line"></span><br><span class="line">```<span class="selector-tag">css</span></span><br><span class="line"><span class="selector-class">.line</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden<span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">-o-text-overflow</span>: ellipsis<span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">text-overflow</span>: ellipsis<span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">display</span>: -webkit-box<span class="meta">!important</span>;</span><br><span class="line">  <span class="comment">/*! autoprefixer: ignore next */</span></span><br><span class="line">  <span class="attribute">-webkit-box-orient</span>: vertical<span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>高性能JavaScript之加载和执行</title>
       <link href="/Blog/2020/03/17/2020-03-18/"/>
       <url>/Blog/2020/03/17/2020-03-18/</url>
