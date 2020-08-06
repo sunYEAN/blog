@@ -4,35 +4,6 @@
   
     
     <entry>
-      <title>cocos creator 学习记录</title>
-      <link href="/2020/07/28/2020-07-28/"/>
-      <url>/2020/07/28/2020-07-28/</url>
-      
-        <content type="html"><![CDATA[<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><ul><li>onLoad // 脚本初始化阶段，场景被载入时触发</li><li>start // 会在第一次执行update之前触发</li><li>update // 每一帧的回调，会在所有动画更新之前执行</li><li>lateUpdate // 动效更新完毕之后执行</li><li>onDestroy // 对应onLoad，与onLoad成对调用</li><li>onEnable  // 组件的enabled属性从false变为true时</li><li>onDisable // 组件的enabled属性从true变为false时</li></ul><p>一个组价的完整生命周期 -&gt; onLoad -&gt; onEnable -&gt; start -&gt; update -&gt; lateUpdate -&gt; onDisable -&gt; onDestroy</p><h3 id="本地存储"><a href="#本地存储" class="headerlink" title="本地存储"></a>本地存储</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数据需要JSON.stringify和parse</span></span><br><span class="line">cc.sys.localStorage.setItem(name, value);</span><br><span class="line">cc.sys.localStorage.getItem(name);</span><br><span class="line">cc.sys.localStorage.removeItem(name);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getLocalStorage = <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">const</span> value = cc.sys.localStorage.getItem(name);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(value);</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> setLocalStorage = <span class="function"><span class="keyword">function</span> (<span class="params">name, value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value !== <span class="literal">null</span> &amp;&amp; <span class="keyword">typeof</span> value === <span class="string">"object"</span>) &#123; </span><br><span class="line">        value = <span class="built_in">JSON</span>.stringify(value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cc.sys.localStorage.setItem(name, value);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> removeLocalStorage = <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> cc.sys.localStorage.removeItem(name);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据本地存储可以通过ncryptjs加密一下，可以缓解游戏被破解的时间。</span></span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 小游戏 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> javascript </tag>
-            
-            <tag> 抖音小游戏 </tag>
-            
-            <tag> cocos creator </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>JavaScript原型</title>
       <link href="/2020/07/20/2020-07-20-1/"/>
       <url>/2020/07/20/2020-07-20-1/</url>
