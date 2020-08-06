@@ -27,11 +27,14 @@
 <meta property="og:site_name" content="南豆">
 <meta property="og:description" content="在开发小程序的时候，经常会需要获取载体平台（微信、抖音、头条等）用户的信息，通过用户在载体平台的唯一凭证（openid等）来做用户登录。今天来聊一聊具体应该怎么做。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://source.mnnuu.cn/websources/blog/2020-07-03/ios.jpg">
+<meta property="og:image" content="https://source.mnnuu.cn/websources/blog/2020-07-03/android.jpg">
 <meta property="article:published_time" content="2020-07-03T11:02:48.000Z">
-<meta property="article:modified_time" content="2020-07-11T09:06:33.024Z">
+<meta property="article:modified_time" content="2020-08-06T08:24:23.790Z">
 <meta property="article:author" content="南豆">
 <meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://source.mnnuu.cn/websources/blog/2020-07-03/ios.jpg">
 
 <link rel="canonical" href="http://yoursite.com/2020/07/03/2020-07-03/">
 
@@ -213,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-11 17:06:33" itemprop="dateModified" datetime="2020-07-11T17:06:33+08:00">2020-07-11</time>
+                <time title="修改时间：2020-08-06 16:24:23" itemprop="dateModified" datetime="2020-08-06T16:24:23+08:00">2020-08-06</time>
               </span>
 
           
@@ -248,6 +251,40 @@
 <p>####</p>
 <p>用户登录过程</p>
 <h4 id="获取小程序指定页面的二维码"><a href="#获取小程序指定页面的二维码" class="headerlink" title="获取小程序指定页面的二维码"></a>获取小程序指定页面的二维码</h4><p>需要后端通过小程序平台的接口去获取buffer 然后保存到本地将地址给到前端。</p>
+<h4 id="bad-code"><a href="#bad-code" class="headerlink" title="bad code"></a>bad code</h4><p>查看客户端、服务端的appId或者appSecret是否正确</p>
+<h4 id="抖音小程序-上传图片的坑"><a href="#抖音小程序-上传图片的坑" class="headerlink" title="抖音小程序 上传图片的坑"></a>抖音小程序 上传图片的坑</h4><p>今天做了一个抖音小程序上传图片的需求，呕… 呕….</p>
+<p>失态了….</p>
+<p>首先通过tt.chooseImage()方法，获取到图片的本地地址，然后通过tt.uploadFile()上传到我方服务器。</p>
+<p>流程很简单，当我做完测试的时候才发现是我太年轻。</p>
+<p>在手机上测试半天。还以为是白名单没配置，转过来去字节跳动小程序平台又配了一个白名单。</p>
+<p>还不行！！</p>
+<p>还能怎么办，只能一步一步debugger、console出来看看。</p>
+<p>对了，说了这么久，到底是什么问题呢？</p>
+<p>Android端上传没问题，后端该返回的都返回了</p>
+<p>iOS端就比较不一样了，chooseImage的时候返回的templatePath会携带有query，正是这个query导致上传出问题。</p>
+<p><img data-src="https://source.mnnuu.cn/websources/blog/2020-07-03/ios.jpg" alt="ios端"><br>这是ios端通过chooseImage选择的图片的路径</p>
+<p><img data-src="https://source.mnnuu.cn/websources/blog/2020-07-03/android.jpg" alt="android端"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">tt.chooseImage(&#123;</span><br><span class="line">  success: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">   <span class="keyword">let</span> path = res.tempFilePaths[<span class="number">0</span>];</span><br><span class="line">   path = path.split(<span class="string">'?'</span>)[<span class="number">0</span>];</span><br><span class="line">   tt.uploadFile(&#123;</span><br><span class="line">     url: <span class="string">'&#123;&#123;https://xxxx.xxx.xx&#125;&#125;'</span>, <span class="comment">// 目标地址</span></span><br><span class="line">     filePath: path, <span class="comment">// 本地文件路径</span></span><br><span class="line">     name: <span class="string">"&#123;&#123;name&#125;&#125;"</span>, <span class="comment">// 名称</span></span><br><span class="line">     success: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">       <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.parse(res.data));</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>OK 搞定！</p>
+<h4 id="Taro-hook-useEffect最后一次的返回要想执行-得注销页面。"><a href="#Taro-hook-useEffect最后一次的返回要想执行-得注销页面。" class="headerlink" title="Taro hook useEffect最后一次的返回要想执行 得注销页面。"></a>Taro hook useEffect最后一次的返回要想执行 得注销页面。</h4><p>如果自己跳转到自己通过push 页面不会销毁，就不会走。</p>
+<h4 id="小程序开发-域名白名单的坑"><a href="#小程序开发-域名白名单的坑" class="headerlink" title="小程序开发 域名白名单的坑"></a>小程序开发 域名白名单的坑</h4><p>uploadFile需要单独添加</p>
+<h4 id="字节跳动小程序-onHide"><a href="#字节跳动小程序-onHide" class="headerlink" title="字节跳动小程序 onHide"></a>字节跳动小程序 onHide</h4><p>Android 打开激励视频不走onHide，IOS 打开激励视频走了onHide</p>
+<h4 id="抖音分享坑出翔"><a href="#抖音分享坑出翔" class="headerlink" title="抖音分享坑出翔"></a>抖音分享坑出翔</h4><p>怎么说呢，最近沉（入）迷（坑）字节跳动小程序，无法自拔。</p>
+<p>字节跳动小程序，主要包括两个平台（头条、抖音）。目前做字节跳动小程序也是主要针对这两个平台来开发。</p>
+<p>字节跳动的分享接收一个templateId的字段</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> onShareApp = <span class="function">(<span class="params">params</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;path, title, desc&#125; = params;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">shareOption</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 视频相关</span></span><br><span class="line">        <span class="keyword">let</span> options = &#123;</span><br><span class="line">            path,</span><br><span class="line">            title,</span><br><span class="line">            success: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="comment">// 成功回调</span></span><br><span class="line">            &#125;,</span><br><span class="line">            fail: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="comment">// 失败回调</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">switch</span> (shareOption.channel) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'video'</span>:</span><br><span class="line">                options.channel= <span class="string">"video"</span>;<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'share'</span>:</span><br><span class="line">                options.desc= desc;</span><br><span class="line">                options.channel= <span class="string">"share"</span>;<span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> options;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// options中有一个字段 options.channel 来表示该分享是那种方式的分享</span></span><br><span class="line"><span class="comment">// “video” 表示拍抖音视频分享</span></span><br><span class="line"><span class="comment">// “share” 表示普通分享</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 抖音中，拍抖音分享需要申请，且分享文案是templateId中指定的文案。 （templateId在小程序后台中申请）</span></span><br><span class="line"><span class="comment">// 头条中，站内分享可以直接指定文案，站外分享依然需要templateId。</span></span><br><span class="line">onShareAppMessage = onShareApp(&#123;</span><br><span class="line">    desc,</span><br><span class="line">    path,</span><br><span class="line">    title,</span><br><span class="line">    ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Taro中获取节点信息"><a href="#Taro中获取节点信息" class="headerlink" title="Taro中获取节点信息"></a>Taro中获取节点信息</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过useRef</span></span><br><span class="line"><span class="keyword">const</span> dom = useRef(<span class="literal">null</span>);</span><br><span class="line"><span class="comment">// &lt;View ref=&#123;dom&#125;&gt;节点&lt;/View&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以通过useLayoutEffect这个hooks来获取，因为它会在DOM变更之后同步调用，可以用来读取dom布局</span></span><br><span class="line">useLayoutEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    dom.boundingClientRect().exec(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">       <span class="keyword">const</span> &#123;width, height&#125; = res[<span class="number">0</span>];</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 通过回调函数的形式来获取 */</span></span><br><span class="line"><span class="keyword">const</span> dom = useCallback(<span class="function">(<span class="params">node</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(node);</span><br><span class="line">&#125;, []);</span><br><span class="line"> <span class="comment">// &lt;View ref=&#123;dom&#125;&gt;节点&lt;/View&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Taro激励视频的坑"><a href="#Taro激励视频的坑" class="headerlink" title="Taro激励视频的坑"></a>Taro激励视频的坑</h4><p>Android 打开激励视频不走onHide，IOS 打开激励视频走了onHide,<br>当 A页面 跳转（push）到 A页面时，由于页面不会销毁，所以useEffect最后一次执行是不会走return的函数的，<br>这时只能在onHide里面去执行激励视频的 <strong>offClose</strong> 和 <strong>offError</strong> 的监听，但是ios打开激励视频会走onHide，所以导致ios中，看完激励视频<br> <strong>onClose</strong> 和 <strong>onError</strong> 注册的回调函数被 <strong>offClose</strong> 和 <strong>offError</strong> 销毁掉，这时可以在打开激励视频之后，在通过一个变量改变去触发一次useEffect，<br>再走一遍绑定onClose和onError回调方法。 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">let</span> VIDEO_AD = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** 创建激励视频 */</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (VIDEO_AD) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (Taro.createRewardedVideoAd) &#123;</span><br><span class="line">        VIDEO_AD = Taro.createRewardedVideoAd(&#123;</span><br><span class="line">            adUnitId: <span class="string">'kg61k2lrdpa1gbcdom'</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, []);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> success_ad = useCallback(<span class="function">(<span class="params">s</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* 看完广告的回调 */</span></span><br><span class="line">&#125;, [ad_id]);</span><br><span class="line"><span class="keyword">const</span> error_ad = useCallback(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* 广告加载错误的回调 */</span></span><br><span class="line">&#125;, []);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 注册回调函数*/</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// if (!ad_id) return;</span></span><br><span class="line">    <span class="keyword">if</span> (VIDEO_AD) &#123;</span><br><span class="line">        VIDEO_AD.onError(error_ad);</span><br><span class="line">        VIDEO_AD.onClose(success_ad);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (VIDEO_AD) &#123;</span><br><span class="line">            VIDEO_AD.offError(error_ad);</span><br><span class="line">            VIDEO_AD.offClose(success_ad);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, [ad_id]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// a push a，上面的useEffect最后一次return的函数不会执行</span></span><br><span class="line">useDidHide(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (VIDEO_AD) &#123;</span><br><span class="line">        VIDEO_AD.offError(error_ad);</span><br><span class="line">        VIDEO_AD.offClose(success_ad);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在打开激励视频之后，通过改变ad_id这个字段去再一次的执行useEffect。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//2. A redirectTo A 则可避免这个问题，也不用在useDidHide中注销回调。</span></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="小程序-路由api"><a href="#小程序-路由api" class="headerlink" title="小程序 路由api"></a>小程序 路由api</h4><p>redirectTo(option) 方法会导致页面出现白色闪屏</p>
 
     </div>
 
@@ -265,7 +302,10 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2020/07/20/2020-07-20/" rel="prev" title="位运算符操作技巧">
+      <i class="fa fa-chevron-left"></i> 位运算符操作技巧
+    </a></div>
       <div class="post-nav-item">
     <a href="/Blog/2020/06/29/2020-06-29/" rel="next" title="2020-06-29">
       2020-06-29 <i class="fa fa-chevron-right"></i>
@@ -330,7 +370,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#小程序流程"><span class="nav-number">1.</span> <span class="nav-text">小程序流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抖音-web-页面-OAuth2-0-授权流程"><span class="nav-number">2.</span> <span class="nav-text">抖音 web 页面 OAuth2.0 授权流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静默授权-（用户无感知）"><span class="nav-number">2.1.</span> <span class="nav-text">静默授权 （用户无感知）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取小程序指定页面的二维码"><span class="nav-number">2.2.</span> <span class="nav-text">获取小程序指定页面的二维码</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#小程序流程"><span class="nav-number">1.</span> <span class="nav-text">小程序流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抖音-web-页面-OAuth2-0-授权流程"><span class="nav-number">2.</span> <span class="nav-text">抖音 web 页面 OAuth2.0 授权流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静默授权-（用户无感知）"><span class="nav-number">2.1.</span> <span class="nav-text">静默授权 （用户无感知）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取小程序指定页面的二维码"><span class="nav-number">2.2.</span> <span class="nav-text">获取小程序指定页面的二维码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bad-code"><span class="nav-number">2.3.</span> <span class="nav-text">bad code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抖音小程序-上传图片的坑"><span class="nav-number">2.4.</span> <span class="nav-text">抖音小程序 上传图片的坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Taro-hook-useEffect最后一次的返回要想执行-得注销页面。"><span class="nav-number">2.5.</span> <span class="nav-text">Taro hook useEffect最后一次的返回要想执行 得注销页面。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小程序开发-域名白名单的坑"><span class="nav-number">2.6.</span> <span class="nav-text">小程序开发 域名白名单的坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字节跳动小程序-onHide"><span class="nav-number">2.7.</span> <span class="nav-text">字节跳动小程序 onHide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抖音分享坑出翔"><span class="nav-number">2.8.</span> <span class="nav-text">抖音分享坑出翔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Taro中获取节点信息"><span class="nav-number">2.9.</span> <span class="nav-text">Taro中获取节点信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Taro激励视频的坑"><span class="nav-number">2.10.</span> <span class="nav-text">Taro激励视频的坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小程序-路由api"><span class="nav-number">2.11.</span> <span class="nav-text">小程序 路由api</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -346,20 +386,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/Blog/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/Blog/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/Blog/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
