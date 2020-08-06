@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.2.1">
-  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon.ico">
-  <link rel="mask-icon" href="/Blog/images/favicon.ico" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
 
-<link rel="stylesheet" href="/Blog/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/Blog/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"yang.mnnuu.cn","root":"/Blog/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"yang.mnnuu.cn","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="这篇文章将教会你手动构建项目环境。  前端自动构建工具从nodejs出现开始，逐渐盛行开。带领WEB前端开发走向了一个自动化、工程化的时代。 目前WEB前端开发的三大框架都有其脚手架，已经帮助我们完成了webpack的配置，可以让我们注重核心代码的开发。如果我们要根据不同的业务需求，自定义配置文件应该怎么做呢？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="webpack环境构建">
-<meta property="og:url" content="http://yang.mnnuu.cn/Blog/2020/03/09/2020-03-09/index.html">
+<meta property="og:url" content="http://yang.mnnuu.cn/2020/03/09/2020-03-09/index.html">
 <meta property="og:site_name" content="南豆">
 <meta property="og:description" content="这篇文章将教会你手动构建项目环境。  前端自动构建工具从nodejs出现开始，逐渐盛行开。带领WEB前端开发走向了一个自动化、工程化的时代。 目前WEB前端开发的三大框架都有其脚手架，已经帮助我们完成了webpack的配置，可以让我们注重核心代码的开发。如果我们要根据不同的业务需求，自定义配置文件应该怎么做呢？">
 <meta property="og:locale" content="zh_CN">
@@ -33,7 +33,7 @@
 <meta property="article:tag" content="开发环境">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yang.mnnuu.cn/Blog/2020/03/09/2020-03-09/">
+<link rel="canonical" href="http://yang.mnnuu.cn/2020/03/09/2020-03-09/">
 
 
 <script id="page-configurations">
@@ -87,7 +87,7 @@
   <div class="site-meta">
 
     <div>
-      <a href="/Blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">南豆</span>
         <span class="logo-line-after"><i></i></span>
@@ -112,22 +112,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/Blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/Blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/Blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/Blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -183,10 +183,10 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yang.mnnuu.cn/Blog/2020/03/09/2020-03-09/">
+    <link itemprop="mainEntityOfPage" href="http://yang.mnnuu.cn/2020/03/09/2020-03-09/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="南豆">
       <meta itemprop="description" content="吾日三省吾身">
     </span>
@@ -221,7 +221,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/Blog/categories/webpack/" itemprop="url" rel="index">
+                  <a href="/categories/webpack/" itemprop="url" rel="index">
                     <span itemprop="name">webpack</span>
                   </a>
                 </span>
@@ -270,7 +270,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/Blog/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" rel="tag"># 开发环境</a>
+              <a href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" rel="tag"># 开发环境</a>
           </div>
 
         
@@ -279,11 +279,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/Blog/2020/03/11/2020-03-11/" rel="prev" title="VUE SSR 踩坑合集">
+    <a href="/2020/03/11/2020-03-11/" rel="prev" title="VUE SSR 踩坑合集">
       <i class="fa fa-chevron-left"></i> VUE SSR 踩坑合集
     </a></div>
       <div class="post-nav-item">
-    <a href="/Blog/2020/03/03/2020-03-03/" rel="next" title="简单的自定义事件实现（观察者模式）">
+    <a href="/2020/03/03/2020-03-03/" rel="next" title="简单的自定义事件实现（观察者模式）">
       简单的自定义事件实现（观察者模式） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -352,27 +352,27 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="南豆"
-      src="/Blog/images/avatar.jpg">
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">南豆</p>
   <div class="site-description" itemprop="description">吾日三省吾身</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/Blog/archives/">
+          <a href="/archives/">
         
           <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/Blog/categories/">
+            <a href="/categories/">
           
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/Blog/tags/">
+            <a href="/tags/">
           
         <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
@@ -431,24 +431,24 @@
   </div>
 
   
-  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
-  <script src="/Blog/lib/velocity/velocity.min.js"></script>
-  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/Blog/js/utils.js"></script>
+<script src="/js/utils.js"></script>
 
-<script src="/Blog/js/motion.js"></script>
-
-
-<script src="/Blog/js/schemes/muse.js"></script>
+<script src="/js/motion.js"></script>
 
 
-<script src="/Blog/js/next-boot.js"></script>
+<script src="/js/schemes/muse.js"></script>
 
-<script src="/Blog/js/bookmark.js"></script>
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
 
 
 
@@ -468,7 +468,7 @@
 
 
   
-<script src="/Blog/js/local-search.js"></script>
+<script src="/js/local-search.js"></script>
 
 
 
@@ -497,7 +497,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'blog-comments',
       owner       : 'sunYEAN',
       admin       : ['sunYEAN'],
-      id          : 'c490b8d294d0ee912701bd8d67832558',
+      id          : '6d86d946f5d93b9823e6c88a0fc42fa6',
         language: 'zh-CN',
       distractionFreeMode: true
     });
