@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.2.1">
-  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon.ico">
-  <link rel="mask-icon" href="/Blog/images/favicon.ico" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
 
-<link rel="stylesheet" href="/Blog/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/Blog/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/Blog/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"yang.mnnuu.cn","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="在Web开发中，观察者模式随处可见。  web程序是一个基于GUI界面的应用，随处可见用户交互。当用户点击了button按钮，需要执行某个方法来响应button的点击事件，那什么时候才能知道用户点击了按钮呢？你知道吗？反正我是不知道… 既然不知道用户操作的时间，如何让程序继续运行，可以思考一下。如果我们先把将要执行的方法保存下来，等到用户点击的时候，只需要去让对应的方法执行不就行了吗？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="简单的自定义事件实现（观察者模式）">
-<meta property="og:url" content="http://yoursite.com/2020/03/03/2020-03-03/index.html">
+<meta property="og:url" content="http://yang.mnnuu.cn/2020/03/03/2020-03-03/index.html">
 <meta property="og:site_name" content="南豆">
 <meta property="og:description" content="在Web开发中，观察者模式随处可见。  web程序是一个基于GUI界面的应用，随处可见用户交互。当用户点击了button按钮，需要执行某个方法来响应button的点击事件，那什么时候才能知道用户点击了按钮呢？你知道吗？反正我是不知道… 既然不知道用户操作的时间，如何让程序继续运行，可以思考一下。如果我们先把将要执行的方法保存下来，等到用户点击的时候，只需要去让对应的方法执行不就行了吗？">
 <meta property="og:locale" content="zh_CN">
@@ -34,7 +34,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://source.mnnuu.cn/websources/blog/2020-03-03/1.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/03/03/2020-03-03/">
+<link rel="canonical" href="http://yang.mnnuu.cn/2020/03/03/2020-03-03/">
 
 
 <script id="page-configurations">
@@ -88,7 +88,7 @@
   <div class="site-meta">
 
     <div>
-      <a href="/Blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">南豆</span>
         <span class="logo-line-after"><i></i></span>
@@ -113,22 +113,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/Blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/Blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/Blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/Blog/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -184,10 +184,10 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/2020-03-03/">
+    <link itemprop="mainEntityOfPage" href="http://yang.mnnuu.cn/2020/03/03/2020-03-03/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="南豆">
       <meta itemprop="description" content="吾日三省吾身">
     </span>
@@ -222,7 +222,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/Blog/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
                     <span itemprop="name">设计模式</span>
                   </a>
                 </span>
@@ -282,7 +282,7 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/Blog/2020/03/09/2020-03-09/" rel="prev" title="webpack环境构建">
+    <a href="/2020/03/09/2020-03-09/" rel="prev" title="webpack环境构建">
       <i class="fa fa-chevron-left"></i> webpack环境构建
     </a></div>
       <div class="post-nav-item"></div>
@@ -352,27 +352,27 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="南豆"
-      src="/Blog/images/avatar.jpg">
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">南豆</p>
   <div class="site-description" itemprop="description">吾日三省吾身</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/Blog/archives/">
+          <a href="/archives/">
         
           <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/Blog/categories/">
+            <a href="/categories/">
           
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/Blog/tags/">
+            <a href="/tags/">
           
         <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
@@ -431,24 +431,24 @@
   </div>
 
   
-  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
-  <script src="/Blog/lib/velocity/velocity.min.js"></script>
-  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/Blog/js/utils.js"></script>
+<script src="/js/utils.js"></script>
 
-<script src="/Blog/js/motion.js"></script>
-
-
-<script src="/Blog/js/schemes/muse.js"></script>
+<script src="/js/motion.js"></script>
 
 
-<script src="/Blog/js/next-boot.js"></script>
+<script src="/js/schemes/muse.js"></script>
 
-<script src="/Blog/js/bookmark.js"></script>
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
 
 
 
@@ -468,7 +468,7 @@
 
 
   
-<script src="/Blog/js/local-search.js"></script>
+<script src="/js/local-search.js"></script>
 
 
 
@@ -497,7 +497,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'blog-comments',
       owner       : 'sunYEAN',
       admin       : ['sunYEAN'],
-      id          : 'bbc851bc6dc7ef5d2f32d1642ea6db08',
+      id          : 'e48d70828fe72d4e96f1d0473cedb92b',
         language: 'zh-CN',
       distractionFreeMode: true
     });
