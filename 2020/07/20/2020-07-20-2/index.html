@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"yang.mnnuu.cn","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="作用域是指程序源代码中定义变量的区域。作用域规定了如何查找变量，也就是确定当前执行代码对变量的访问权限。JavaScript 采用词法作用域(lexical scoping)，也就是静态作用域。  JavaScript 是词法作用域，在编译阶段(JS执行过程分为编译阶段、执行阶段)的时候作用域就确定了。 JavaScript的执行过程一、编译阶段当执行JavaScript之前编译器会先对js代码">
+  <meta name="description" content="深入了解JavaScript的执行过程，原型链，作用域，执行上下文，this指向，闭包…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript深入">
+<meta property="og:title" content="JavaScript深入 之 JS的执行过程">
 <meta property="og:url" content="http://yang.mnnuu.cn/2020/07/20/2020-07-20-2/index.html">
 <meta property="og:site_name" content="南豆">
-<meta property="og:description" content="作用域是指程序源代码中定义变量的区域。作用域规定了如何查找变量，也就是确定当前执行代码对变量的访问权限。JavaScript 采用词法作用域(lexical scoping)，也就是静态作用域。  JavaScript 是词法作用域，在编译阶段(JS执行过程分为编译阶段、执行阶段)的时候作用域就确定了。 JavaScript的执行过程一、编译阶段当执行JavaScript之前编译器会先对js代码">
+<meta property="og:description" content="深入了解JavaScript的执行过程，原型链，作用域，执行上下文，this指向，闭包…">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-20T07:00:38.000Z">
-<meta property="article:modified_time" content="2020-07-20T07:55:34.331Z">
+<meta property="article:modified_time" content="2020-08-07T11:02:24.680Z">
 <meta property="article:author" content="南豆">
 <meta name="twitter:card" content="summary">
 
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>JavaScript深入 | 南豆</title>
+  <title>JavaScript深入 之 JS的执行过程 | 南豆</title>
   
 
 
@@ -195,7 +195,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          JavaScript深入
+          JavaScript深入 之 JS的执行过程
         </h2>
 
         <div class="post-meta">
@@ -204,10 +204,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-20 15:00:38 / 修改时间：15:55:34" itemprop="dateCreated datePublished" datetime="2020-07-20T15:00:38+08:00">2020-07-20</time>
+              <time title="创建时间：2020-07-20 15:00:38" itemprop="dateCreated datePublished" datetime="2020-07-20T15:00:38+08:00">2020-07-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-07 19:02:24" itemprop="dateModified" datetime="2020-08-07T19:02:24+08:00">2020-08-07</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -227,39 +233,39 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
+        <p>深入了解JavaScript的执行过程，原型链，作用域，执行上下文，this指向，闭包…</p>
+<a id="more"></a>
+
+<blockquote>
 <p>作用域是指程序源代码中定义变量的区域。作用域规定了如何查找变量，也就是确定当前执行代码对变量的访问权限。JavaScript 采用词法作用域(lexical scoping)，也就是静态作用域。</p>
 </blockquote>
 <p>JavaScript 是词法作用域，在编译阶段(JS执行过程分为编译阶段、执行阶段)的时候作用域就确定了。</p>
-<h2 id="JavaScript的执行过程"><a href="#JavaScript的执行过程" class="headerlink" title="JavaScript的执行过程"></a>JavaScript的执行过程</h2><h3 id="一、编译阶段"><a href="#一、编译阶段" class="headerlink" title="一、编译阶段"></a>一、编译阶段</h3><p>当执行JavaScript之前编译器会先对js代码进行词法分析、然后生成可执行代码，并确定作用域。</p>
-<h3 id="二、执行阶段"><a href="#二、执行阶段" class="headerlink" title="二、执行阶段"></a>二、执行阶段</h3><p><strong>执行上下文 和 执行上下文栈</strong><br>当JS引擎执行每一段可执行代码的时候，会创建对应的<strong>执行上下文</strong>。而<strong>执行上下文栈</strong>是JS引擎创建来管理执行上下文的。</p>
+<h2 id="一、JavaScript的执行过程"><a href="#一、JavaScript的执行过程" class="headerlink" title="一、JavaScript的执行过程"></a>一、JavaScript的执行过程</h2><h3 id="1、编译阶段"><a href="#1、编译阶段" class="headerlink" title="1、编译阶段"></a>1、编译阶段</h3><p>当执行JavaScript之前编译器会先对js代码进行词法分析、然后生成可执行代码，并确定作用域。</p>
+<h3 id="2、执行阶段"><a href="#2、执行阶段" class="headerlink" title="2、执行阶段"></a>2、执行阶段</h3><p><strong>执行上下文 和 执行上下文栈</strong><br>当JS引擎执行每一段可执行代码的时候，会创建对应的<strong>执行上下文</strong>。而<strong>执行上下文栈</strong>是JS引擎创建来管理执行上下文的。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ECSTACK = [ globalContext ]</span><br></pre></td></tr></table></figure>
 
 <p>JavaScript引擎执行js代码的时候，最先遇到的是全局代码，所以初始化 <strong>“执行上下文栈”</strong> 的时候会先向其压入一个 <strong>“全局执行上下文”</strong>，并且只有当应用程序结束的时候才会清空。所以栈底永远有一个 <strong>“全局执行上下文”</strong>。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/* 看代码 */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun3</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'fun3'</span>) &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun2</span>(<span class="params"></span>) </span>&#123; fun3() &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun1</span>(<span class="params"></span>) </span>&#123; fun2() &#125;</span><br><span class="line">fun1();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 伪代码展示执行过程</span></span><br><span class="line">ECSTACK.push(<span class="xml"><span class="tag">&lt;<span class="name">fun1</span>&gt;</span> functionContext);</span></span><br><span class="line"><span class="xml">// func1 中执行了 fun2 创建fun2的执行上下文并压入执行栈中</span></span><br><span class="line">ECSTACK.push(&lt;fun2&gt; functionContext);</span><br><span class="line">// 执行fun2代码，执行了 fun3 创建fun3的执行上下文并压入执行栈</span><br><span class="line">ECSTACK.push(&lt;fun3&gt; functionContext);</span><br><span class="line"></span><br><span class="line">// fun3 执行完毕</span><br><span class="line">ECSTACK.pop();</span><br><span class="line">// fun2 执行完毕</span><br><span class="line">ECSTACK.pop();</span><br><span class="line">// fun1 执行完毕</span><br><span class="line">ECSTACK.pop();</span><br></pre></td></tr></table></figure>
 
 <p><strong>对于每个执行上下文，都可分为两个阶段</strong></p>
+<p><strong>创建阶段</strong></p>
 <ul>
-<li><strong>创建阶段</strong><ul>
 <li>创建变量对象（Variable object, VO）</li>
 <li>创建作用域链（Scope chain）</li>
-<li>确定this的指向</li>
+<li>确定this的指向<br><strong>执行阶段</strong></li>
+<li>变量对象激活，变为活动对象(合成作用域链)。 AO = VO + function parameters + arguments</li>
 </ul>
-</li>
-<li><strong>执行阶段</strong><ul>
-<li>变量对象激活，变为活动对象。 AO = VO + function parameters + arguments</li>
-</ul>
-</li>
-</ul>
-<h4 id="1、变量对象"><a href="#1、变量对象" class="headerlink" title="1、变量对象"></a>1、变量对象</h4><p>变量对象是与执行上下文相关的数据作用域，存储了在上下文中定义的变量和函数声明。其中全局上下文的变量对象就是全局对象（window）</p>
-<p>创建执行上下文时，</p>
 <p>总结：</p>
 <ul>
 <li>全局上下文的变量对象是全局对象</li>
 <li>函数上下文的变量对象初始化只包括Arguments对象</li>
-<li>进入执行上下文时会给变量对象添加形参、函数声明、变量声明等初始的属性值</li>
+<li>进入执行上下文时会给变量对象 添加形参、函数声明、变量声明等初始的属性值</li>
 <li>在代码执行阶段、会再次修改变量对象的属性值</li>
 </ul>
+<h2 id="二、变量对象"><a href="#二、变量对象" class="headerlink" title="二、变量对象"></a>二、变量对象</h2><p>变量对象是与执行上下文相关的数据作用域，存储了在上下文中定义的变量和函数声明。其中全局上下文的变量对象就是全局对象（window）</p>
+<p>变量对象与执行上下文有关，其存储了该上下文中的变量和函数声明(变量提升)等。</p>
+<p>对于全局上下文</p>
+<p>全局对象是浏览器预置的对象（可以通过该对象调用浏览器的原生API），该对象拥有像路由、存储等等内置的一些方法。</p>
 
     </div>
 
@@ -275,8 +281,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/20/2020-07-20-1/" rel="prev" title="JavaScript原型">
-      <i class="fa fa-chevron-left"></i> JavaScript原型
+    <a href="/2020/07/20/2020-07-20-1/" rel="prev" title="JavaScript深入 之 原型（prototype）">
+      <i class="fa fa-chevron-left"></i> JavaScript深入 之 原型（prototype）
     </a></div>
       <div class="post-nav-item">
     <a href="/2020/07/20/2020-07-20/" rel="next" title="位运算符操作技巧">
@@ -342,7 +348,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript的执行过程"><span class="nav-number">1.</span> <span class="nav-text">JavaScript的执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、编译阶段"><span class="nav-number">1.1.</span> <span class="nav-text">一、编译阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、执行阶段"><span class="nav-number">1.2.</span> <span class="nav-text">二、执行阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、变量对象"><span class="nav-number">1.2.1.</span> <span class="nav-text">1、变量对象</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、JavaScript的执行过程"><span class="nav-number">1.</span> <span class="nav-text">一、JavaScript的执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、编译阶段"><span class="nav-number">1.1.</span> <span class="nav-text">1、编译阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、执行阶段"><span class="nav-number">1.2.</span> <span class="nav-text">2、执行阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、变量对象"><span class="nav-number">2.</span> <span class="nav-text">二、变量对象</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -358,7 +364,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
